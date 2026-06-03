@@ -84,8 +84,7 @@ generate_key() {
 }
 
 create_config() {
-    local key
-    key=$(generate_key)
+    SS_KEY=$(generate_key)
 
     mkdir -p "$(dirname "$SS_CONFIG")"
 
@@ -93,7 +92,7 @@ create_config() {
 {
     "server": "0.0.0.0",
     "server_port": ${SS_PORT},
-    "password": "${key}",
+    "password": "${SS_KEY}",
     "method": "${SS_METHOD}",
     "fast_open": true,
     "mode": "tcp_and_udp",
@@ -102,8 +101,7 @@ create_config() {
 }
 CONF
     chmod 600 "$SS_CONFIG"
-    log "配置已写入 $SS_CONFIG" >&2
-    echo "$key"
+    log "配置已写入 $SS_CONFIG"
 }
 
 setup_systemd() {
@@ -226,12 +224,11 @@ main() {
             check_os
             install_deps
             install_ssrust
-            local key
-            key=$(create_config)
+            create_config
             optimize_sysctl
             setup_firewall
             setup_systemd
-            show_result "$key"
+            show_result "$SS_KEY"
             ;;
     esac
 }
