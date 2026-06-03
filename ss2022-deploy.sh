@@ -102,7 +102,7 @@ create_config() {
 }
 CONF
     chmod 600 "$SS_CONFIG"
-    log "配置已写入 $SS_CONFIG"
+    log "配置已写入 $SS_CONFIG" >&2
     echo "$key"
 }
 
