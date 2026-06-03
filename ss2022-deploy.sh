@@ -168,8 +168,9 @@ show_result() {
     local ip
     ip=$(get_public_ip)
 
-    local ss_uri_raw="${SS_METHOD}:${key}@${ip}:${SS_PORT}"
-    local ss_uri="ss://$(echo -n "$ss_uri_raw" | base64 -w0)#SS2022-TW"
+    local userinfo
+    userinfo=$(echo -n "${SS_METHOD}:${key}" | base64 -w0 | sed 's/+/-/g; s/\//_/g; s/=//g')
+    local ss_uri="ss://${userinfo}@${ip}:${SS_PORT}#SS2022-TW"
 
     echo ""
     echo -e "${CYAN}═══════════════════════════════════════════════${NC}"
