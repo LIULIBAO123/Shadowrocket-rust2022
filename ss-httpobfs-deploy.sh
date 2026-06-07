@@ -59,7 +59,7 @@ install_xray() {
 }
 
 generate_password() {
-    tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 16
+    openssl rand -hex 8
 }
 
 create_config() {
@@ -134,30 +134,14 @@ CONF
 }
 
 setup_systemd() {
-    if [[ -f /etc/systemd/system/${XRAY_SERVICE}.service ]]; then
-        systemctl daemon-reload
-        systemctl restart ${XRAY_SERVICE}
-        log "Xray 服务已重启"
-    else
-        cat > /etc/systemd/system/${XRAY_SERVICE}.service <<EOF
-[Unit]
-Description=Xray Service
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-ExecStart=${XRAY_BIN} run -config ${XRAY_CONFIG}
-Restart=on-failure
-RestartSec=5
-LimitNOFILE=65536
-
-[Install]
-WantedBy=multi-user.target
-EOF
-        systemctl daemon-reload
-        systemctl enable --now ${XRAY_SERVICE}
+    systemctl daemon-reload
+    systemctl enable ${XRAY_SERVICE} 2>/dev/null || true
+    systemctl restart ${XRAY_SERVICE}
+    sleep 1
+    if systemctl is-active --quiet ${XRAY_SERVICE}; then
         log "Xray 服务已启动并设为开机自启"
+    else
+        err "Xray 服务启动失败，请检查 journalctl -u ${XRAY_SERVICE}"
     fi
 }
 
