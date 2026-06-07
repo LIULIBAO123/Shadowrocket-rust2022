@@ -9,9 +9,9 @@ set -euo pipefail
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
 
-SS_PORT="${SS_PORT:-13101}"
+SS_PORT="${SS_PORT:-13122}"
 SS_METHOD="aes-128-gcm"
-OBFS_HOST="${OBFS_HOST:-e5481fec62d1.microsoft.com}"
+OBFS_HOST="${OBFS_HOST:-www.aws.com}"
 XRAY_BIN="/usr/local/bin/xray"
 XRAY_CONFIG="/usr/local/etc/xray/config.json"
 XRAY_SERVICE="xray"
