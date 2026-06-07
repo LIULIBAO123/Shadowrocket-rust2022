@@ -129,7 +129,7 @@ create_config() {
     ]
 }
 CONF
-    chmod 600 "$XRAY_CONFIG"
+    chmod 644 "$XRAY_CONFIG"
     log "配置已写入 $XRAY_CONFIG"
 }
 
